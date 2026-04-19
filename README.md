@@ -7,6 +7,10 @@ OpsPulse is a production-intent B2B SaaS concept focused on reducing incident-re
 - **ROI path**: automated playbooks, risk scoring, and billing insights drive measurable time savings and retained ARR.
 - **Monetization**: recurring subscription tiers (Scale/Enterprise), seat expansion, and usage-based overage services.
 
+## Product phases
+- **Phase 1**: secure command center for auth, KPIs, and billing orchestration.
+- **Phase 2**: workflow orchestration layer with runbook triggers, health scoring, and role-based execution controls.
+
 ## Frontend architecture
 ```
 src/
@@ -18,8 +22,10 @@ src/
   features/
     auth/
     dashboard/
+    workflows/         # Phase 2 orchestration screens
     billing/
     admin/
+  hooks/               # Workflow data hooks
   lib/                 # API service and interceptors
   styles/              # Design tokens + responsive system
 ```
@@ -38,6 +44,7 @@ src/
 - `server/src/modules/*` route modules organized by domain.
 - `server/prisma/schema.prisma` models for users, orgs, sessions, and subscriptions.
 - Billing endpoint scaffold designed for Stripe Checkout integration.
+- Workflow orchestration endpoints for operational runbook execution.
 
 ## Run
 ```bash

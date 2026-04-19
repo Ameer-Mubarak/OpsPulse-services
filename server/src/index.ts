@@ -6,6 +6,7 @@ import { env } from './config/env.js';
 import authRoutes from './modules/auth/routes.js';
 import metricsRoutes from './modules/metrics/routes.js';
 import subscriptionsRoutes from './modules/subscriptions/routes.js';
+import workflowsRoutes from './modules/workflows/routes.js';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok', time: new Date().
 app.use('/api/auth', authRoutes);
 app.use('/api/metrics', metricsRoutes);
 app.use('/api/subscriptions', subscriptionsRoutes);
+app.use('/api/workflows', workflowsRoutes);
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 
