@@ -7,6 +7,7 @@ import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { BillingPage } from '@/features/billing/BillingPage';
 import { SecurityPage } from '@/features/admin/SecurityPage';
 import { WorkflowsPage } from '@/features/workflows/WorkflowsPage';
+import { AlertsPage } from '@/features/alerts/AlertsPage';
 
 const Protected = ({ children }: { children: JSX.Element }) => {
   const { user, loading } = useAuth();
@@ -20,6 +21,7 @@ export const AppRouter = () => (
     <Route path="/login" element={<LoginPage />} />
     <Route path="/dashboard" element={<Protected><DashboardPage /></Protected>} />
     <Route path="/workflows" element={<Protected><WorkflowsPage /></Protected>} />
+    <Route path="/alerts" element={<Protected><AlertsPage /></Protected>} />
     <Route path="/billing" element={<Protected><BillingPage /></Protected>} />
     <Route path="/security" element={<Protected><SecurityPage /></Protected>} />
     <Route path="*" element={<Navigate to="/dashboard" replace />} />

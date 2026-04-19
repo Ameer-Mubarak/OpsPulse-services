@@ -22,6 +22,10 @@ export const WorkflowIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M4 6h9M4 12h5m-5 6h9m7-9v9m0-9-3 3m3-3 3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
 );
 
+export const AlertIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M12 4a6 6 0 0 0-6 6v4l-2 2h16l-2-2v-4a6 6 0 0 0-6-6Z" stroke="currentColor" strokeWidth="1.8"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+);
+
 export const ShieldIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M12 2 4 5v6c0 5.25 3.4 10.16 8 11.77 4.6-1.6 8-6.52 8-11.77V5l-8-3Z" stroke="currentColor" strokeWidth="1.8"/><path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
 );

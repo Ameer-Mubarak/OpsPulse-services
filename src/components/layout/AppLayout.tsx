@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { BillingIcon, DashboardIcon, PulseLogo, ShieldIcon, WorkflowIcon } from '@/components/icons/Icons';
+import { AlertIcon, BillingIcon, DashboardIcon, PulseLogo, ShieldIcon, WorkflowIcon } from '@/components/icons/Icons';
 import { useAuth } from '@/features/auth/AuthContext';
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: DashboardIcon },
   { label: 'Workflows', to: '/workflows', icon: WorkflowIcon },
+  { label: 'Alerts', to: '/alerts', icon: AlertIcon },
   { label: 'Billing', to: '/billing', icon: BillingIcon },
   { label: 'Security', to: '/security', icon: ShieldIcon }
 ];

@@ -7,6 +7,8 @@ import authRoutes from './modules/auth/routes.js';
 import metricsRoutes from './modules/metrics/routes.js';
 import subscriptionsRoutes from './modules/subscriptions/routes.js';
 import workflowsRoutes from './modules/workflows/routes.js';
+import alertsRoutes from './modules/alerts/routes.js';
+import securityRoutes from './modules/security/routes.js';
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/metrics', metricsRoutes);
 app.use('/api/subscriptions', subscriptionsRoutes);
 app.use('/api/workflows', workflowsRoutes);
+app.use('/api/alerts', alertsRoutes);
+app.use('/api/security', securityRoutes);
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 
