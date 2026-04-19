@@ -10,6 +10,7 @@ import workflowsRoutes from './modules/workflows/routes.js';
 import alertsRoutes from './modules/alerts/routes.js';
 import securityRoutes from './modules/security/routes.js';
 import forecastRoutes from './modules/forecast/routes.js';
+import intelligenceRoutes from './modules/intelligence/routes.js';
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/workflows', workflowsRoutes);
 app.use('/api/alerts', alertsRoutes);
 app.use('/api/security', securityRoutes);
 app.use('/api/forecast', forecastRoutes);
+app.use('/api/intelligence', intelligenceRoutes);
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 

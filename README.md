@@ -12,6 +12,7 @@ OpsPulse is a production-intent B2B SaaS concept focused on reducing incident-re
 - **Phase 2 (Completed)**: workflow orchestration with execution tracking (`runCount`, `lastRunAt`) and role-based runbook triggers.
 - **Phase 3 (Completed)**: risk alert center with acknowledgment workflow and auditable security events.
 - **Phase 4 (Completed)**: executive forecast simulation with scenario history and auditable simulations.
+- **Phase 5 (Completed)**: AI copilot recommendation engine with ranked actions and one-click application flows.
 
 ## Frontend architecture
 ```
@@ -27,6 +28,7 @@ src/
     workflows/
     alerts/
     forecast/
+    intelligence/      # Phase 5 copilot workspace
     billing/
     admin/
   hooks/               # Workflow + alerts data hooks
@@ -52,6 +54,7 @@ src/
 - Workflow endpoints include execution state updates.
 - Alert endpoints include status transitions and acknowledgment metadata.
 - Forecast endpoints include simulation history.
+- Intelligence endpoints include recommendation ranking and apply actions.
 
 ## Run
 ```bash

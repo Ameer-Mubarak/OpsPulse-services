@@ -35,6 +35,11 @@ export const ShieldIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M12 2 4 5v6c0 5.25 3.4 10.16 8 11.77 4.6-1.6 8-6.52 8-11.77V5l-8-3Z" stroke="currentColor" strokeWidth="1.8"/><path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
 );
 
+
+export const CopilotIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M8 7a4 4 0 1 1 8 0v3a4 4 0 0 1-8 0V7Z" stroke="currentColor" strokeWidth="1.8"/><path d="M6 18h12M9 15.5v2.5m6-2.5v2.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+);
+
 export const BillingIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" {...props}><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8"/><circle cx="17" cy="15" r="1.5" fill="currentColor"/></svg>
 );

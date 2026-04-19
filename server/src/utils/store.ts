@@ -27,6 +27,14 @@ export type ForecastRun = {
   createdAt: string;
 };
 
+export type Recommendation = {
+  id: string;
+  title: string;
+  rationale: string;
+  annualImpact: number;
+  applied: boolean;
+};
+
 export type SubscriptionState = {
   plan: 'Scale' | 'Enterprise';
   seatCount: number;
@@ -46,6 +54,11 @@ export const store = {
     { id: 'alt_3', title: 'Overage Threshold Hit: Datagrid', severity: 'low', status: 'open', impact: 'Potential upsell opportunity', acknowledgedBy: null, acknowledgedAt: null }
   ] as Alert[],
   forecastRuns: [] as ForecastRun[],
+  recommendations: [
+    { id: 'rec_1', title: 'Auto-escalate P1 tickets at 15m', rationale: 'Cuts mean time to mitigation', annualImpact: 94000, applied: false },
+    { id: 'rec_2', title: 'Trigger CSM outreach at 30% usage drop', rationale: 'Prevents silent churn', annualImpact: 126000, applied: false },
+    { id: 'rec_3', title: 'Convert top overage accounts to enterprise plan', rationale: 'Captures expansion ARR', annualImpact: 211000, applied: false }
+  ] as Recommendation[],
   subscription: {
     plan: 'Scale',
     seatCount: 25,
