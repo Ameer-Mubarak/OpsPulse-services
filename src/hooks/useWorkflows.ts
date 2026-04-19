@@ -7,6 +7,8 @@ export type Workflow = {
   owner: string;
   status: 'healthy' | 'warning' | 'critical';
   automationCoverage: number;
+  lastRunAt: string | null;
+  runCount: number;
 };
 
 export const useWorkflows = () => {

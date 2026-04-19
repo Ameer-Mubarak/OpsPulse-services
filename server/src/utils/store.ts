@@ -1,0 +1,55 @@
+export type Workflow = {
+  id: string;
+  name: string;
+  owner: string;
+  status: 'healthy' | 'warning' | 'critical';
+  automationCoverage: number;
+  lastRunAt: string | null;
+  runCount: number;
+};
+
+export type Alert = {
+  id: string;
+  title: string;
+  severity: 'high' | 'medium' | 'low';
+  status: 'open' | 'resolved';
+  impact: string;
+  acknowledgedBy: string | null;
+  acknowledgedAt: string | null;
+};
+
+export type ForecastRun = {
+  id: string;
+  churnReductionPct: number;
+  expansionLiftPct: number;
+  projectedNetRevenueImpact: number;
+  actor: string;
+  createdAt: string;
+};
+
+export type SubscriptionState = {
+  plan: 'Scale' | 'Enterprise';
+  seatCount: number;
+  status: 'active' | 'past_due' | 'trialing';
+  updatedAt: string;
+};
+
+export const store = {
+  workflows: [
+    { id: 'wf_incident', name: 'Incident Escalation Matrix', owner: 'Support Ops', status: 'healthy', automationCoverage: 89, lastRunAt: null, runCount: 0 },
+    { id: 'wf_renewal', name: 'Renewal Risk Recovery', owner: 'CS Ops', status: 'warning', automationCoverage: 67, lastRunAt: null, runCount: 0 },
+    { id: 'wf_usage', name: 'Usage Drop-off Remediation', owner: 'RevOps', status: 'critical', automationCoverage: 52, lastRunAt: null, runCount: 0 }
+  ] as Workflow[],
+  alerts: [
+    { id: 'alt_1', title: 'SLA Breach Risk: Acme Corp', severity: 'high', status: 'open', impact: '$12,000 ARR at risk', acknowledgedBy: null, acknowledgedAt: null },
+    { id: 'alt_2', title: 'Renewal Churn Signal: Lumio', severity: 'medium', status: 'open', impact: 'Usage dropped 42%', acknowledgedBy: null, acknowledgedAt: null },
+    { id: 'alt_3', title: 'Overage Threshold Hit: Datagrid', severity: 'low', status: 'open', impact: 'Potential upsell opportunity', acknowledgedBy: null, acknowledgedAt: null }
+  ] as Alert[],
+  forecastRuns: [] as ForecastRun[],
+  subscription: {
+    plan: 'Scale',
+    seatCount: 25,
+    status: 'active',
+    updatedAt: new Date().toISOString()
+  } as SubscriptionState
+};

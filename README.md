@@ -7,11 +7,11 @@ OpsPulse is a production-intent B2B SaaS concept focused on reducing incident-re
 - **ROI path**: automated playbooks, risk scoring, and billing insights drive measurable time savings and retained ARR.
 - **Monetization**: recurring subscription tiers (Scale/Enterprise), seat expansion, and usage-based overage services.
 
-## Product phases
-- **Phase 1**: secure command center for auth, KPIs, and billing orchestration.
-- **Phase 2**: workflow orchestration layer with runbook triggers, health scoring, and role-based execution controls.
-- **Phase 3**: revenue risk alerting + auditable action tracking for compliance and incident accountability.
-- **Phase 4**: executive forecast simulation for ARR planning and board-level scenario modeling.
+## Product phases (MVP completion status)
+- **Phase 1 (Completed)**: secure command center for auth, KPIs, billing plan selection, and seat management.
+- **Phase 2 (Completed)**: workflow orchestration with execution tracking (`runCount`, `lastRunAt`) and role-based runbook triggers.
+- **Phase 3 (Completed)**: risk alert center with acknowledgment workflow and auditable security events.
+- **Phase 4 (Completed)**: executive forecast simulation with scenario history and auditable simulations.
 
 ## Frontend architecture
 ```
@@ -26,7 +26,7 @@ src/
     dashboard/
     workflows/
     alerts/
-    forecast/          # Phase 4 forecasting workspace
+    forecast/
     billing/
     admin/
   hooks/               # Workflow + alerts data hooks
@@ -48,10 +48,10 @@ src/
 ## Backend production design
 - `server/src/modules/*` route modules organized by domain.
 - `server/prisma/schema.prisma` models for users, orgs, sessions, and subscriptions.
-- Billing endpoint scaffold designed for Stripe Checkout integration.
-- Workflow orchestration endpoints for operational runbook execution.
-- Alert management endpoints with acknowledgment audit logging.
-- Forecast simulation endpoints with auditable scenario runs.
+- Billing endpoints include plan + seat updates.
+- Workflow endpoints include execution state updates.
+- Alert endpoints include status transitions and acknowledgment metadata.
+- Forecast endpoints include simulation history.
 
 ## Run
 ```bash

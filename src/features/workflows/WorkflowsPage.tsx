@@ -19,12 +19,13 @@ export const WorkflowsPage = () => {
               <h3>{workflow.name}</h3>
               <small>Owner: {workflow.owner}</small>
               <p style={{ margin: '8px 0' }}>Automation coverage: {workflow.automationCoverage}%</p>
-              <span className={`badge ${workflow.status === 'healthy' ? 'badge-success' : workflow.status === 'warning' ? 'badge-warning' : 'badge-error'}`}>
-                {workflow.status}
-              </span>
-              <div style={{ marginTop: 12 }}>
-                <Button onClick={() => void trigger(workflow.id)} variant="secondary">Trigger Runbook</Button>
+              <small>Runs: {workflow.runCount} {workflow.lastRunAt ? `• Last run ${new Date(workflow.lastRunAt).toLocaleString()}` : ''}</small>
+              <div style={{ margin: '8px 0' }}>
+                <span className={`badge ${workflow.status === 'healthy' ? 'badge-success' : workflow.status === 'warning' ? 'badge-warning' : 'badge-error'}`}>
+                  {workflow.status}
+                </span>
               </div>
+              <Button onClick={() => void trigger(workflow.id)} variant="secondary">Trigger Runbook</Button>
             </article>
           ))}
         </div>

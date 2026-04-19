@@ -23,7 +23,10 @@ export const AlertsPage = () => {
                 </span>
               </div>
               <small>{alert.impact}</small>
-              <Button variant="secondary" onClick={() => void acknowledge(alert.id)}>Acknowledge</Button>
+              <small>Status: {alert.status}{alert.acknowledgedBy ? ` • Ack by ${alert.acknowledgedBy}` : ''}</small>
+              <Button variant="secondary" onClick={() => void acknowledge(alert.id)} disabled={alert.status === 'resolved'}>
+                {alert.status === 'resolved' ? 'Acknowledged' : 'Acknowledge'}
+              </Button>
             </article>
           ))}
         </div>

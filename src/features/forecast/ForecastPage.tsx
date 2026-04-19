@@ -8,17 +8,32 @@ type Scenario = {
   renewalRiskArr: number;
   expansionPipeline: number;
   grossRetention: number;
-  note?: string;
+};
+
+type ForecastRun = {
+  id: string;
+  churnReductionPct: number;
+  expansionLiftPct: number;
+  projectedNetRevenueImpact: number;
+  actor: string;
+  createdAt: string;
 };
 
 export const ForecastPage = () => {
   const [scenario, setScenario] = useState<Scenario | null>(null);
+  const [history, setHistory] = useState<ForecastRun[]>([]);
   const [churnReductionPct, setChurnReductionPct] = useState('8');
   const [expansionLiftPct, setExpansionLiftPct] = useState('12');
   const [result, setResult] = useState('');
 
+  const refresh = async () => {
+    const { data } = await api.get('/forecast/scenarios');
+    setScenario(data.scenario);
+    setHistory(data.history ?? []);
+  };
+
   useEffect(() => {
-    api.get('/forecast/scenarios').then(({ data }) => setScenario(data.scenario)).catch(() => setScenario(null));
+    void refresh();
   }, []);
 
   const runSimulation = async () => {
@@ -27,6 +42,7 @@ export const ForecastPage = () => {
       expansionLiftPct: Number(expansionLiftPct)
     });
     setResult(data.message);
+    await refresh();
   };
 
   return (
@@ -51,7 +67,17 @@ export const ForecastPage = () => {
         <label>Expansion Lift (%)<Input value={expansionLiftPct} onChange={(e) => setExpansionLiftPct(e.target.value)} /></label>
         <Button onClick={() => void runSimulation()}>Run Forecast</Button>
         {result && <span className="badge badge-success">{result}</span>}
-        {scenario?.note && <small>{scenario.note}</small>}
+      </article>
+
+      <article className="card">
+        <h3>Simulation History</h3>
+        {history.length === 0 ? <small>No simulations run yet.</small> : (
+          <ul>
+            {history.map((run) => (
+              <li key={run.id}>{run.actor} ran {run.churnReductionPct}%/{run.expansionLiftPct}% → ${run.projectedNetRevenueImpact.toLocaleString()}</li>
+            ))}
+          </ul>
+        )}
       </article>
     </section>
   );

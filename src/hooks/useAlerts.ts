@@ -7,6 +7,8 @@ export type Alert = {
   severity: 'high' | 'medium' | 'low';
   status: 'open' | 'resolved';
   impact: string;
+  acknowledgedBy: string | null;
+  acknowledgedAt: string | null;
 };
 
 export const useAlerts = () => {
