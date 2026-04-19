@@ -1,0 +1,55 @@
+# OpsPulse — Enterprise Workflow Intelligence SaaS
+
+OpsPulse is a production-intent B2B SaaS concept focused on reducing incident-resolution time, preventing SLA penalties, and improving renewal retention for post-sales operations teams.
+
+## Why this product
+- **Pain point**: Ops and support leaders lose revenue due to SLA breaches, reactive escalations, and poor visibility into renewal risk.
+- **ROI path**: automated playbooks, risk scoring, and billing insights drive measurable time savings and retained ARR.
+- **Monetization**: recurring subscription tiers (Scale/Enterprise), seat expansion, and usage-based overage services.
+
+## Frontend architecture
+```
+src/
+  app/                 # Routing and app shell composition
+  components/
+    icons/             # Inline SVG icon + logo system
+    layout/            # Sidebar shell
+    ui/                # Button, Input, Loading states
+  features/
+    auth/
+    dashboard/
+    billing/
+    admin/
+  lib/                 # API service and interceptors
+  styles/              # Design tokens + responsive system
+```
+
+## Security layer implemented
+- JWT access-token authentication (`/api/auth/login`, `/api/auth/me`)
+- CSRF token issuance + verification (`/api/auth/csrf`, `x-csrf-token`)
+- Route-level RBAC middleware (`allowRoles`)
+- Zod input validation per endpoint
+- Rate limiting globally with 15-min windows
+- Helmet headers with CSP
+- CORS allowlist and credential handling
+- Structured env validation via Zod
+
+## Backend production design
+- `server/src/modules/*` route modules organized by domain.
+- `server/prisma/schema.prisma` models for users, orgs, sessions, and subscriptions.
+- Billing endpoint scaffold designed for Stripe Checkout integration.
+
+## Run
+```bash
+npm install
+npm run dev           # frontend
+npm run server:dev    # backend
+```
+
+Set environment:
+```
+JWT_SECRET=<minimum 32 char secret>
+CORS_ORIGIN=http://localhost:5173
+PORT=4000
+DATABASE_URL=postgresql://...
+```
