@@ -40,6 +40,11 @@ export const CopilotIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M8 7a4 4 0 1 1 8 0v3a4 4 0 0 1-8 0V7Z" stroke="currentColor" strokeWidth="1.8"/><path d="M6 18h12M9 15.5v2.5m6-2.5v2.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
 );
 
+
+export const GovernanceIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" {...props}><path d="M12 3 4 7v5c0 4.6 3.1 8.9 8 10 4.9-1.1 8-5.4 8-10V7l-8-4Z" stroke="currentColor" strokeWidth="1.8"/><path d="M9 12h6M12 9v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+);
+
 export const BillingIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" {...props}><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8"/><circle cx="17" cy="15" r="1.5" fill="currentColor"/></svg>
 );

@@ -11,6 +11,7 @@ import alertsRoutes from './modules/alerts/routes.js';
 import securityRoutes from './modules/security/routes.js';
 import forecastRoutes from './modules/forecast/routes.js';
 import intelligenceRoutes from './modules/intelligence/routes.js';
+import governanceRoutes from './modules/governance/routes.js';
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/alerts', alertsRoutes);
 app.use('/api/security', securityRoutes);
 app.use('/api/forecast', forecastRoutes);
 app.use('/api/intelligence', intelligenceRoutes);
+app.use('/api/governance', governanceRoutes);
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 

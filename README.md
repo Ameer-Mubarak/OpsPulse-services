@@ -7,12 +7,15 @@ OpsPulse is a production-intent B2B SaaS concept focused on reducing incident-re
 - **ROI path**: automated playbooks, risk scoring, and billing insights drive measurable time savings and retained ARR.
 - **Monetization**: recurring subscription tiers (Scale/Enterprise), seat expansion, and usage-based overage services.
 
-## Product phases (MVP completion status)
+## Product phases (roadmap)
 - **Phase 1 (Completed)**: secure command center for auth, KPIs, billing plan selection, and seat management.
 - **Phase 2 (Completed)**: workflow orchestration with execution tracking (`runCount`, `lastRunAt`) and role-based runbook triggers.
 - **Phase 3 (Completed)**: risk alert center with acknowledgment workflow and auditable security events.
 - **Phase 4 (Completed)**: executive forecast simulation with scenario history and auditable simulations.
 - **Phase 5 (Completed)**: AI copilot recommendation engine with ranked actions and one-click application flows.
+- **Phase 6 (Completed)**: governance control tower for approval/rejection of high-risk changes.
+- **Phase 7 (Planned)**: external integrations (CRM, ticketing, data warehouse sync).
+- **Phase 8 (Planned)**: enterprise compliance package (SAML, SCIM, advanced audit exports).
 
 ## Frontend architecture
 ```
@@ -28,7 +31,8 @@ src/
     workflows/
     alerts/
     forecast/
-    intelligence/      # Phase 5 copilot workspace
+    intelligence/
+    governance/        # Phase 6 approvals workspace
     billing/
     admin/
   hooks/               # Workflow + alerts data hooks
@@ -55,6 +59,7 @@ src/
 - Alert endpoints include status transitions and acknowledgment metadata.
 - Forecast endpoints include simulation history.
 - Intelligence endpoints include recommendation ranking and apply actions.
+- Governance endpoints include approval decisions with audit recording.
 
 ## Run
 ```bash

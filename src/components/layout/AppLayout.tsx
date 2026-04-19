@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { AlertIcon, BillingIcon, CopilotIcon, DashboardIcon, ForecastIcon, PulseLogo, ShieldIcon, WorkflowIcon } from '@/components/icons/Icons';
+import { AlertIcon, BillingIcon, CopilotIcon, DashboardIcon, ForecastIcon, GovernanceIcon, PulseLogo, ShieldIcon, WorkflowIcon } from '@/components/icons/Icons';
 import { useAuth } from '@/features/auth/AuthContext';
 
 const navItems = [
@@ -8,6 +8,7 @@ const navItems = [
   { label: 'Alerts', to: '/alerts', icon: AlertIcon },
   { label: 'Forecast', to: '/forecast', icon: ForecastIcon },
   { label: 'Copilot', to: '/copilot', icon: CopilotIcon },
+  { label: 'Governance', to: '/governance', icon: GovernanceIcon },
   { label: 'Billing', to: '/billing', icon: BillingIcon },
   { label: 'Security', to: '/security', icon: ShieldIcon }
 ];

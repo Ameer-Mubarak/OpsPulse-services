@@ -35,6 +35,17 @@ export type Recommendation = {
   applied: boolean;
 };
 
+export type GovernanceAction = {
+  id: string;
+  title: string;
+  riskLevel: 'low' | 'medium' | 'high';
+  category: 'security' | 'billing' | 'workflow';
+  status: 'pending' | 'approved' | 'rejected';
+  requestedBy: string;
+  requestedAt: string;
+  decidedAt: string | null;
+};
+
 export type SubscriptionState = {
   plan: 'Scale' | 'Enterprise';
   seatCount: number;
@@ -59,6 +70,10 @@ export const store = {
     { id: 'rec_2', title: 'Trigger CSM outreach at 30% usage drop', rationale: 'Prevents silent churn', annualImpact: 126000, applied: false },
     { id: 'rec_3', title: 'Convert top overage accounts to enterprise plan', rationale: 'Captures expansion ARR', annualImpact: 211000, applied: false }
   ] as Recommendation[],
+  governanceActions: [
+    { id: 'gov_1', title: 'Enable automated credit notes above $10k', riskLevel: 'high', category: 'billing', status: 'pending', requestedBy: 'owner@opspulse.io', requestedAt: new Date().toISOString(), decidedAt: null },
+    { id: 'gov_2', title: 'Increase P1 auto-close timer to 48h', riskLevel: 'medium', category: 'workflow', status: 'pending', requestedBy: 'manager@opspulse.io', requestedAt: new Date().toISOString(), decidedAt: null }
+  ] as GovernanceAction[],
   subscription: {
     plan: 'Scale',
     seatCount: 25,
