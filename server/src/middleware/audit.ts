@@ -40,11 +40,27 @@ export function auditMiddleware(req: Request, res: Response, next: NextFunction)
   console.log('[AUDIT]', JSON.stringify(log));
   next();
 }
-    timestamp: new Date().toISOString(),
+
+export function auditAction(action: string, resource: string) {
+  return function (req: Request, _res: Response, next: NextFunction) {
+    const rawUserId =
+      (req as any).user?.id ??
+      (req as any).auth?.email ??
+      req.headers['x-user-id'] ??
+      'anonymous';
+
+    const userId = typeof rawUserId === 'string' ? rawUserId : String(rawUserId);
+
+    const entry = {
+      action,
+      resource,
+      method: req.method,
+      path: req.originalUrl,
+      userId,
+      timestamp: new Date().toISOString(),
+    };
+
+    console.log('[AUDIT_ACTION]', JSON.stringify(entry));
+    next();
   };
-
-  // يمكنك ربطها ب DB أو logger لاحقًا
-  console.log('[AUDIT]', JSON.stringify(log));
-
-  next();
 }
