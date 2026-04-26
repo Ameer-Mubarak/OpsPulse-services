@@ -18,7 +18,7 @@ export const LoginPage = () => {
     setSubmitting(true);
     setError('');
     try {
-      await login(email, password);
+      await login(email.trim(), password.trim());
       navigate('/dashboard');
     } catch {
       setError('Invalid credentials or account locked.');

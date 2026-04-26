@@ -8,11 +8,12 @@ import { issueCsrfToken } from '../../middleware/csrf.js';
 const router = Router();
 
 const loginSchema = z.object({
-  body: z.object({ email: z.string().email(), password: z.string().min(12).max(72) })
+  body: z.object({ email: z.string().trim().email(), password: z.string().trim().min(12).max(72) })
 });
 
 router.post('/login', validate(loginSchema), (req, res) => {
-  const { email, password } = req.body as { email: string; password: string };
+  const email = (req.body.email as string).trim();
+  const password = (req.body.password as string).trim();
   if (email !== 'ameer.mubarak1235@gmail.com' || password !== 'ameer1234ameer') return void res.status(401).json({ error: 'Invalid credentials' });
   const user = { id: 'usr_1', email, role: 'owner' as const };
   const token = signToken({ sub: user.id, role: user.role, email: user.email });
