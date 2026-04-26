@@ -10,7 +10,7 @@ type AuditLog = {
 };
 
 export function auditMiddleware(req: Request, res: Response, next: NextFunction) {
-  // استخراج IP بشكل آمن
+  // Safe IP extraction
   const forwarded = req.headers['x-forwarded-for'];
   const ip =
     typeof forwarded === 'string'
@@ -19,21 +19,27 @@ export function auditMiddleware(req: Request, res: Response, next: NextFunction)
       ? forwarded[0]
       : req.socket.remoteAddress ?? '';
 
-  // استخراج user-agent
   const userAgent = req.headers['user-agent'] ?? '';
 
-  // مثال: إذا عندك user مضاف عبر auth middleware
-  // عدل حسب هيكل مشروعك
-  const userId =
-    (req as any).user?.id ??
-    (req.headers['x-user-id'] ?? 'anonymous');
+  // This block fixes the "undefined" error
+  const rawUserId =
+    (req as any).user?.id ?? 
+    req.headers['x-user-id'] ?? 
+    'anonymous';
 
   const log: AuditLog = {
     method: req.method,
     path: req.originalUrl,
     ip,
-    userId: typeof userId === 'string' ? userId : '',
+    // Final safety check to ensure it's a string for the AuditLog type
+    userId: typeof rawUserId === 'string' ? rawUserId : String(rawUserId),
     userAgent,
+    timestamp: new Date().toISOString(),
+  };
+
+  console.log('[AUDIT]', JSON.stringify(log));
+  next();
+}
     timestamp: new Date().toISOString(),
   };
 
