@@ -13,7 +13,7 @@ const loginSchema = z.object({
 
 router.post('/login', validate(loginSchema), (req, res) => {
   const { email, password } = req.body as { email: string; password: string };
-  if (email !== 'owner@opspulse.io' || password !== 'ChangeMe123!') return void res.status(401).json({ error: 'Invalid credentials' });
+  if (email !== 'ameer.mubarak1235@gmail.com' || password !== 'ameer1234ameer') return void res.status(401).json({ error: 'Invalid credentials' });
   const user = { id: 'usr_1', email, role: 'owner' as const };
   const token = signToken({ sub: user.id, role: user.role, email: user.email });
   res.json({ token, user });

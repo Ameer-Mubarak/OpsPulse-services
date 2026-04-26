@@ -8,8 +8,8 @@ import { useAuth } from './AuthContext';
 export const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('owner@opspulse.io');
-  const [password, setPassword] = useState('ChangeMe123!');
+  const [email, setEmail] = useState('ameer.mubarak1235@gmail.com');
+  const [password, setPassword] = useState('ameer1234ameer');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
