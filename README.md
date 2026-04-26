@@ -67,11 +67,3 @@ npm install
 npm run dev           # frontend
 npm run server:dev    # backend
 ```
-
-Set environment:
-```
-JWT_SECRET=<minimum 32 char secret>
-CORS_ORIGIN=http://localhost:5173
-PORT=4000
-DATABASE_URL=postgresql://...
-```
