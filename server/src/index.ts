@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import authRoutes from './modules/auth/routes.js';
 import metricsRoutes from './modules/metrics/routes.js';
@@ -14,6 +15,7 @@ import intelligenceRoutes from './modules/intelligence/routes.js';
 import governanceRoutes from './modules/governance/routes.js';
 
 const app = express();
+app.set('trust proxy', process.env.TRUST_PROXY === 'true');
 
 app.use(helmet({
   contentSecurityPolicy: {
@@ -27,7 +29,9 @@ app.use(helmet({
 
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json({ limit: '200kb' }));
+app.use(cookieParser());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 200, standardHeaders: true }));
+app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, max: 30, standardHeaders: true }));
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 app.use('/api/auth', authRoutes);
