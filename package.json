@@ -14,7 +14,7 @@
     "prisma:generate": "prisma generate --schema server/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate deploy --schema server/prisma/schema.prisma",
     "prisma:seed": "tsx server/prisma/seed.ts",
-    "test": "tsx --test server/tests/auth.test.ts",
+    "test": "JWT_SECRET=12345678901234567890123456789012 PORT=4000 DATABASE_URL=postgresql://x:x@localhost:5432/x CORS_ORIGIN=http://localhost:5173 FRONTEND_URL=http://localhost:5173 EMAIL_FROM=test@example.com TRUST_PROXY=false NODE_ENV=test tsx --test server/tests/auth.test.ts",
     "ci": "npm run prisma:generate && npm run test"
   },
   "dependencies": {

@@ -20,8 +20,11 @@ export const LoginPage = () => {
     try {
       await login(email.trim(), password.trim());
       navigate('/dashboard');
-    } catch {
-      setError('Invalid credentials or account locked.');
+    } catch (error: unknown) {
+      const status = (error as { response?: { status?: number } }).response?.status;
+      if (status == 403) setError('Please verify your email before login.');
+      else if (status == 423) setError('Account is temporarily locked due to failed attempts.');
+      else setError('Invalid credentials.');
     } finally {
       setSubmitting(false);
     }

@@ -10,4 +10,6 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run prisma:generate
+      - run: npm run server:build
+      - run: npm run build
       - run: npm test

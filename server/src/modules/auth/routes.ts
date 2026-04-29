@@ -5,6 +5,8 @@ import { requireAuth } from '../../middleware/auth.js';
 import { issueCsrfToken } from '../../middleware/csrf.js';
 import { prisma } from '../../utils/prisma.js';
 import { generateOpaqueToken, hashPassword, hashToken, signAccessToken, verifyPassword } from '../../utils/auth.js';
+import { sendVerificationEmail } from './email.js';
+import { env } from '../../config/env.js';
 
 const router = Router();
 const LOCK_MS = 15 * 60 * 1000;
@@ -15,18 +17,21 @@ const signupSchema = loginSchema;
 const verifySchema = z.object({ query: z.object({ token: z.string().min(64) }) });
 
 const setRefreshCookie = (res: Response, token: string) => {
-  res.cookie('ops_rt', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/api/auth', maxAge: 30 * 24 * 60 * 60 * 1000 });
+  res.cookie('ops_rt', token, { httpOnly: true, secure: env.NODE_ENV === 'production', sameSite: 'lax', path: '/api/auth', maxAge: 30 * 24 * 60 * 60 * 1000 });
 };
 
 router.post('/signup', validate(signupSchema), async (req, res) => {
   const email = req.body.email.trim().toLowerCase();
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return void res.status(409).json({ error: 'Email already registered' });
+
   const user = await prisma.user.create({ data: { email, passwordHash: await hashPassword(req.body.password.trim()), role: 'owner' } });
   const verifyToken = generateOpaqueToken();
   await prisma.verificationToken.create({ data: { userId: user.id, tokenHash: hashToken(verifyToken), expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) } });
-  const verifyUrl = `${process.env.FRONTEND_URL}/verify?token=${verifyToken}`;
-  console.log(`Verification URL for ${email}: ${verifyUrl}`);
+
+  const verifyUrl = `${env.FRONTEND_URL}/verify?token=${verifyToken}`;
+  await sendVerificationEmail(email, verifyUrl);
+
   res.status(201).json({ message: 'Signup successful. Verify your email.', user: { id: user.id, email: user.email, role: user.role } });
 });
 
@@ -49,14 +54,17 @@ router.post('/login', validate(loginSchema), async (req, res) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return void res.status(401).json({ error: 'Invalid credentials' });
   if (user.lockUntil && user.lockUntil > new Date()) return void res.status(423).json({ error: 'Account locked' });
+
   const valid = await verifyPassword(req.body.password.trim(), user.passwordHash);
   if (!valid) {
     const attempts = user.failedLoginAttempts + 1;
     await prisma.user.update({ where: { id: user.id }, data: { failedLoginAttempts: attempts, lockUntil: attempts >= MAX_ATTEMPTS ? new Date(Date.now() + LOCK_MS) : null } });
     return void res.status(401).json({ error: 'Invalid credentials' });
   }
+
   if (!user.isVerified) return void res.status(403).json({ error: 'Email not verified' });
   await prisma.user.update({ where: { id: user.id }, data: { failedLoginAttempts: 0, lockUntil: null } });
+
   const accessToken = signAccessToken({ sub: user.id, role: user.role, email: user.email });
   const refresh = generateOpaqueToken();
   await prisma.refreshToken.create({ data: { userId: user.id, tokenHash: hashToken(refresh), expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) } });
@@ -67,16 +75,25 @@ router.post('/login', validate(loginSchema), async (req, res) => {
 router.post('/refresh', async (req, res) => {
   const token = req.cookies?.ops_rt as string | undefined;
   if (!token) return void res.status(401).json({ error: 'Missing refresh token' });
+
   const tokenHash = hashToken(token);
   const record = await prisma.refreshToken.findUnique({ where: { tokenHash }, include: { user: true } });
   if (!record || record.revokedAt || record.expiresAt < new Date()) return void res.status(401).json({ error: 'Invalid refresh token' });
+
+  const newRefresh = generateOpaqueToken();
+  await prisma.$transaction([
+    prisma.refreshToken.update({ where: { id: record.id }, data: { revokedAt: new Date() } }),
+    prisma.refreshToken.create({ data: { userId: record.user.id, tokenHash: hashToken(newRefresh), expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) } })
+  ]);
+
+  setRefreshCookie(res, newRefresh);
   const accessToken = signAccessToken({ sub: record.user.id, role: record.user.role, email: record.user.email });
   res.json({ token: accessToken });
 });
 
 router.post('/logout', async (req, res) => {
   const token = req.cookies?.ops_rt as string | undefined;
-  if (token) await prisma.refreshToken.updateMany({ where: { tokenHash: hashToken(token) }, data: { revokedAt: new Date() } });
+  if (token) await prisma.refreshToken.updateMany({ where: { tokenHash: hashToken(token), revokedAt: null }, data: { revokedAt: new Date() } });
   res.clearCookie('ops_rt', { path: '/api/auth' });
   res.status(204).send();
 });
