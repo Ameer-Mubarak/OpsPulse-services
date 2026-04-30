@@ -4,6 +4,8 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Loading } from '@/components/ui/Loading';
 import { useAuth } from '@/features/auth/AuthContext';
 import { LoginPage } from '@/features/auth/LoginPage';
+import { SignupPage } from '@/features/auth/SignupPage';
+import { VerifyPage } from '@/features/auth/VerifyPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { BillingPage } from '@/features/billing/BillingPage';
 import { SecurityPage } from '@/features/admin/SecurityPage';
@@ -20,4 +22,4 @@ const Protected = ({ children }) => {
         return _jsx(Navigate, { to: "/login", replace: true });
     return _jsx(AppLayout, { children: children });
 };
-export const AppRouter = () => (_jsxs(Routes, { children: [_jsx(Route, { path: "/login", element: _jsx(LoginPage, {}) }), _jsx(Route, { path: "/dashboard", element: _jsx(Protected, { children: _jsx(DashboardPage, {}) }) }), _jsx(Route, { path: "/workflows", element: _jsx(Protected, { children: _jsx(WorkflowsPage, {}) }) }), _jsx(Route, { path: "/alerts", element: _jsx(Protected, { children: _jsx(AlertsPage, {}) }) }), _jsx(Route, { path: "/forecast", element: _jsx(Protected, { children: _jsx(ForecastPage, {}) }) }), _jsx(Route, { path: "/copilot", element: _jsx(Protected, { children: _jsx(IntelligencePage, {}) }) }), _jsx(Route, { path: "/governance", element: _jsx(Protected, { children: _jsx(GovernancePage, {}) }) }), _jsx(Route, { path: "/billing", element: _jsx(Protected, { children: _jsx(BillingPage, {}) }) }), _jsx(Route, { path: "/security", element: _jsx(Protected, { children: _jsx(SecurityPage, {}) }) }), _jsx(Route, { path: "*", element: _jsx(Navigate, { to: "/dashboard", replace: true }) })] }));
+export const AppRouter = () => (_jsxs(Routes, { children: [_jsx(Route, { path: "/login", element: _jsx(LoginPage, {}) }), _jsx(Route, { path: "/signup", element: _jsx(SignupPage, {}) }), _jsx(Route, { path: "/verify", element: _jsx(VerifyPage, {}) }), _jsx(Route, { path: "/dashboard", element: _jsx(Protected, { children: _jsx(DashboardPage, {}) }) }), _jsx(Route, { path: "/workflows", element: _jsx(Protected, { children: _jsx(WorkflowsPage, {}) }) }), _jsx(Route, { path: "/alerts", element: _jsx(Protected, { children: _jsx(AlertsPage, {}) }) }), _jsx(Route, { path: "/forecast", element: _jsx(Protected, { children: _jsx(ForecastPage, {}) }) }), _jsx(Route, { path: "/copilot", element: _jsx(Protected, { children: _jsx(IntelligencePage, {}) }) }), _jsx(Route, { path: "/governance", element: _jsx(Protected, { children: _jsx(GovernancePage, {}) }) }), _jsx(Route, { path: "/billing", element: _jsx(Protected, { children: _jsx(BillingPage, {}) }) }), _jsx(Route, { path: "/security", element: _jsx(Protected, { children: _jsx(SecurityPage, {}) }) }), _jsx(Route, { path: "*", element: _jsx(Navigate, { to: "/dashboard", replace: true }) })] }));
