@@ -50,6 +50,8 @@ src/
 - CORS allowlist and credential handling
 - Structured env validation via Zod
 - Audit trail endpoint for privileged roles (`/api/security/audit`)
+- Auth module logger enforces structured keys (`level`, `event`, `module`) and redacts token-like fields.
+- Raw verification URLs/tokens are never logged in production; only redacted metadata is emitted.
 
 ## Backend production design
 - `server/src/modules/*` route modules organized by domain.
