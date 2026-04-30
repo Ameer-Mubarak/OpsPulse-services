@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PulseLogo } from '@/components/icons/Icons';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -37,6 +37,9 @@ export const LoginPage = () => {
         <label>Password<Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required /></label>
         {error && <span className="badge badge-error">{error}</span>}
         <Button type="submit" disabled={submitting}>{submitting ? 'Authenticating...' : 'Enter Workspace'}</Button>
+        <small>
+          New here? <Link to="/signup">Create account</Link> · Need verification? <Link to="/verify">Verify account</Link>
+        </small>
       </form>
     </div>
   );
