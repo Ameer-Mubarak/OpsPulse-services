@@ -78,3 +78,5 @@ npm run server:dev    # backend
 
 ### CI migration gate
 CI runs `npm run verify:migrations` so migration failures surface with full Prisma output before merge/deploy.
+### Created by with passion by Ameer Mubarak from yemen.
+disc0d is me
