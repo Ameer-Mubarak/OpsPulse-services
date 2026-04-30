@@ -7,6 +7,7 @@ import { prisma } from '../../utils/prisma.js';
 import { generateOpaqueToken, hashPassword, hashToken, signAccessToken, verifyPassword } from '../../utils/auth.js';
 import { sendVerificationEmail } from './email.js';
 import { env } from '../../config/env.js';
+import { AuthErrorCode, authError } from './errors.js';
 
 const router = Router();
 const LOCK_MS = 15 * 60 * 1000;
@@ -23,7 +24,7 @@ const setRefreshCookie = (res: Response, token: string) => {
 router.post('/signup', validate(signupSchema), async (req, res) => {
   const email = req.body.email.trim().toLowerCase();
   const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) return void res.status(409).json({ error: 'Email already registered' });
+  if (existing) return void res.status(409).json(authError(AuthErrorCode.EMAIL_EXISTS, 'Email already registered'));
 
   const user = await prisma.user.create({ data: { email, passwordHash: await hashPassword(req.body.password.trim()), role: 'owner' } });
   const verifyToken = generateOpaqueToken();
@@ -38,10 +39,10 @@ router.post('/signup', validate(signupSchema), async (req, res) => {
 router.get('/verify', validate(verifySchema), async (req, res) => {
   const verifyToken = req.query.token;
   const resolvedToken = Array.isArray(verifyToken) ? verifyToken[0] : verifyToken;
-  if (typeof resolvedToken !== 'string') return void res.status(400).json({ error: 'Invalid or expired token' });
+  if (typeof resolvedToken !== 'string') return void res.status(400).json(authError(AuthErrorCode.INVALID_OR_EXPIRED_TOKEN, 'Invalid or expired token'));
   const tokenHash = hashToken(resolvedToken);
   const record = await prisma.verificationToken.findUnique({ where: { tokenHash } });
-  if (!record || record.usedAt || record.expiresAt < new Date()) return void res.status(400).json({ error: 'Invalid or expired token' });
+  if (!record || record.usedAt || record.expiresAt < new Date()) return void res.status(400).json(authError(AuthErrorCode.INVALID_OR_EXPIRED_TOKEN, 'Invalid or expired token'));
   await prisma.$transaction([
     prisma.user.update({ where: { id: record.userId }, data: { isVerified: true } }),
     prisma.verificationToken.update({ where: { id: record.id }, data: { usedAt: new Date() } })
@@ -52,17 +53,17 @@ router.get('/verify', validate(verifySchema), async (req, res) => {
 router.post('/login', validate(loginSchema), async (req, res) => {
   const email = req.body.email.trim().toLowerCase();
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return void res.status(401).json({ error: 'Invalid credentials' });
-  if (user.lockUntil && user.lockUntil > new Date()) return void res.status(423).json({ error: 'Account locked' });
+  if (!user) return void res.status(401).json(authError(AuthErrorCode.INVALID_CREDENTIALS, 'Invalid credentials'));
+  if (user.lockUntil && user.lockUntil > new Date()) return void res.status(423).json(authError(AuthErrorCode.ACCOUNT_LOCKED, 'Account locked'));
 
   const valid = await verifyPassword(req.body.password.trim(), user.passwordHash);
   if (!valid) {
     const attempts = user.failedLoginAttempts + 1;
     await prisma.user.update({ where: { id: user.id }, data: { failedLoginAttempts: attempts, lockUntil: attempts >= MAX_ATTEMPTS ? new Date(Date.now() + LOCK_MS) : null } });
-    return void res.status(401).json({ error: 'Invalid credentials' });
+    return void res.status(401).json(authError(AuthErrorCode.INVALID_CREDENTIALS, 'Invalid credentials'));
   }
 
-  if (!user.isVerified) return void res.status(403).json({ error: 'Email not verified' });
+  if (!user.isVerified) return void res.status(403).json(authError(AuthErrorCode.EMAIL_NOT_VERIFIED, 'Email not verified'));
   await prisma.user.update({ where: { id: user.id }, data: { failedLoginAttempts: 0, lockUntil: null } });
 
   const accessToken = signAccessToken({ sub: user.id, role: user.role, email: user.email });
@@ -74,11 +75,11 @@ router.post('/login', validate(loginSchema), async (req, res) => {
 
 router.post('/refresh', async (req, res) => {
   const token = req.cookies?.ops_rt as string | undefined;
-  if (!token) return void res.status(401).json({ error: 'Missing refresh token' });
+  if (!token) return void res.status(401).json(authError(AuthErrorCode.MISSING_REFRESH_TOKEN, 'Missing refresh token'));
 
   const tokenHash = hashToken(token);
   const record = await prisma.refreshToken.findUnique({ where: { tokenHash }, include: { user: true } });
-  if (!record || record.revokedAt || record.expiresAt < new Date()) return void res.status(401).json({ error: 'Invalid refresh token' });
+  if (!record || record.revokedAt || record.expiresAt < new Date()) return void res.status(401).json(authError(AuthErrorCode.INVALID_REFRESH_TOKEN, 'Invalid refresh token'));
 
   const newRefresh = generateOpaqueToken();
   await prisma.$transaction([

@@ -21,9 +21,10 @@ export const LoginPage = () => {
       await login(email.trim(), password.trim());
       navigate('/dashboard');
     } catch (error: unknown) {
-      const status = (error as { response?: { status?: number } }).response?.status;
-      if (status == 403) setError('Please verify your email before login.');
-      else if (status == 423) setError('Account is temporarily locked due to failed attempts.');
+      const payload = (error as { response?: { data?: { error?: { code?: string } } } }).response?.data;
+      const code = payload?.error?.code;
+      if (code === 'EMAIL_NOT_VERIFIED') setError('Please verify your email before login.');
+      else if (code === 'ACCOUNT_LOCKED') setError('Account is temporarily locked due to failed attempts.');
       else setError('Invalid credentials.');
     } finally {
       setSubmitting(false);
