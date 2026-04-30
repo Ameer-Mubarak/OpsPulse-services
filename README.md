@@ -69,3 +69,12 @@ npm install
 npm run dev           # frontend
 npm run server:dev    # backend
 ```
+
+
+## Deployment (Railway)
+1. Configure `DATABASE_URL` in Railway service variables for the backend.
+2. Run migrations during deploy: `npm run verify:migrations`. This command executes `prisma migrate deploy --schema server/prisma/schema.prisma` and prints Prisma SQL/schema errors directly to logs, causing the deploy to fail fast when schema changes are invalid.
+3. Start the backend with `npm run server:start` after migrations complete.
+
+### CI migration gate
+CI runs `npm run verify:migrations` so migration failures surface with full Prisma output before merge/deploy.
