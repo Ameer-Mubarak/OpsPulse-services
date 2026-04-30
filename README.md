@@ -67,3 +67,19 @@ npm install
 npm run dev           # frontend
 npm run server:dev    # backend
 ```
+
+## Supabase Postgres setup (required for persistent auth)
+1. In Supabase, copy your Postgres connection string and use SSL mode required.
+2. Set `DATABASE_URL` in backend environment to:
+   `postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres?sslmode=require`
+3. Run:
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+```
+4. For Railway backend deployment, set the same env vars from `.env.example` (never commit secrets).
+
+### Your provided Supabase URL
+Use the URL you shared only as an environment variable value and rotate it if it was exposed publicly.
+
